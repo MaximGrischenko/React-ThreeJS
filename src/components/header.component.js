@@ -1,46 +1,81 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
-const styles = {
-  header: {
-    padding: 10,
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
   },
-  list: {
-    listStyle: "none",
+  menuButton: {
+    marginRight: theme.spacing(2)
   },
-  button: {
-    minWidth: 200,
+  title: {
+    flexGrow: 1,
   }
-};
+}));
 
-const primitives = [
-  {
-    id: "1",
-    title: "Cube",
-  },
-  {
-    id: "2",
-    title: "Sphere",
-  },
-  {
-    id: "3",
-    title: "Cone",
-  },
+const options = [
+  'Cube',
+  'Sphere',
+  'Cone'
 ];
 
-const Header = ({onAddPrimitive}) => {
+const Header = ({onSelected}) => {
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  function handleClick(event) {
+    setAnchorEl(event.currentTarget);
+  }
+
+  function handleClose() {
+    setAnchorEl(null);
+  }
+
+  const handleSelected = (option) => {
+    handleClose();
+    onSelected(option);
+  };
+
   return (
-    <header style={styles.header}>
-      <input style={styles.button} type="button" value="Menu" />
-      <ul style={styles.list}>
-        {
-          primitives.map(primitive => (
-            <li key={primitive.id}>
-              <input style={styles.button} type="button" value={primitive.title}
-                     onClick={()=> onAddPrimitive(primitive.id)}/>
-            </li>
-          ))
-        }
-      </ul>
+    <header className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton className={classes.menuButton}
+                      edge="start"
+                      color="inherit"
+                      aria-label="more"
+                      aria-controls="long-menu"
+                      aria-haspopup="true"
+                      onClick={handleClick}>
+            <MenuIcon />
+          </IconButton>
+          <Menu id="long-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={open}
+                onClose={handleClose}
+                PaperProps={{
+                  style: {
+                    width: 200,
+                    marginLeft: 50
+                  },
+                }}>
+            {options.map(option => (
+              <MenuItem key={option} onClick={() => handleSelected(option)}>{`Add ${option}`}</MenuItem>
+            ))}
+          </Menu>
+          <Typography variant="h6" align="right" className={classes.title}>ThreeJS Primitives</Typography>
+        </Toolbar>
+      </AppBar>
     </header>
   )
 };

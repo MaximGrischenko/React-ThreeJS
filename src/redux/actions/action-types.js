@@ -1,0 +1,4 @@
+//Primitives
+export const SEL_PRIMITIVE = '[PRIMITIVE] SEL_PRIMITIVE';
+export const ADD_SUCCESS = '[PRIMITIVE] ADD_SUCCESS';
+export const DEL_PRIMITIVE = '[PRIMITIVE] DEL_PRIMITIVE';
